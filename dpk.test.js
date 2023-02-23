@@ -1,4 +1,5 @@
 const { deterministicPartitionKey } = require("./dpk");
+const { faker } = require("@faker-js/faker");
 
 describe("deterministicPartitionKey", () => {
   it("Returns the literal '0' when given no input", () => {
@@ -8,7 +9,7 @@ describe("deterministicPartitionKey", () => {
 
   it("Returns the same partitionKey when it doesn't exceed maximum partition key length", () => {
     const validPartitionKeyObject = {
-      partitionKey: "some_valid_length_key",
+      partitionKey: faker.datatype.string(faker.datatype.number({ max: 256 })),
     };
     const partitionKey = deterministicPartitionKey(validPartitionKeyObject);
     expect(partitionKey).toBe(validPartitionKeyObject.partitionKey);
@@ -16,7 +17,7 @@ describe("deterministicPartitionKey", () => {
 
   it("Returns the same partitionKey as a string when the input is a number", () => {
     const numericPartitionKeyObject = {
-      partitionKey: 100,
+      partitionKey: faker.datatype.number(),
     };
     const partitionKey = deterministicPartitionKey(numericPartitionKeyObject);
     expect(typeof partitionKey).toBe("string");
@@ -24,15 +25,15 @@ describe("deterministicPartitionKey", () => {
 
   it("Returns a 128 length string when the input doesn't have a partitionKey property", () => {
     const invalidObject = {
-      someInvalidKey: 'something'
+      someInvalidKey: faker.lorem.word(),
     };
     const partitionKey = deterministicPartitionKey(invalidObject);
     expect(partitionKey.length).toBe(128);
   });
 
-  it("Returns a 128 length string when the input is longer than that", () => {
+  it("Returns a 128 length string when the input is longer than 256 characters", () => {
     const longPartitionKeyObject = {
-      partitionKey: "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nam eu ornare risus. Maecenas eget odio quam. Nunc sagittis et mi quis cursus. Quisque tempor neque eu est porttitor, ac pulvinar quam gravida. In ullamcorper, libero id porta dignissim, velit turpis.",
+      partitionKey: faker.datatype.string(257),
     };
     const partitionKey = deterministicPartitionKey(longPartitionKeyObject);
     expect(partitionKey.length).toBe(128);
