@@ -9,6 +9,9 @@ You've been asked to refactor the function `deterministicPartitionKey` in [`dpk.
 You will be graded on the exhaustiveness and quality of your unit tests, the depth of your refactor, and the level of insight into your thought process provided by the written explanation.
 
 ## Your Explanation Here
+What I did:
 - Added early return to function to improve readability;
 - The early return also provided less nested blocks of code;
 - Have isolated the hash logic in a new method to avoid duplication of code.
+
+This version is more readable than the original one because when we avoid nested blocks of code and use early return, other developers don't have to understand the intersection between all code conditions to predict the outcome.
